@@ -1,0 +1,15 @@
+import capos.*
+
+describe "Capos: Parte 1"{
+    method initialize(){
+        rolando.capacidad(2)
+    }
+
+    test "Caso de prueba: Parte 1.1"{
+        rolando.recogerObjeto("Espada del destino")
+        rolando.recogerObjeto("Libro de hechizos")
+        rolando.recogerObjeto("Collar divino")
+        rolando.recogerObjeto("Armadura de acero valkyrio")
+        assert.equals(#{"Espada del destino", "Libro de hechizos"}, rolando.objetos())
+    }
+}
