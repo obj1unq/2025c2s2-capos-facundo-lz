@@ -16,17 +16,17 @@ describe "Capos: Parte 1"{
     test "Caso de prueba: Parte 1.2"{
         rolando.recogerObjeto(espadaDelDestino)
         rolando.recogerObjeto(libroDeHechizos)
-        rolando.irAlCastillo()
+        rolando.irAMorada()
         assert.equals(#{espadaDelDestino, libroDeHechizos}, castilloDePiedra.objetos())
         rolando.recogerObjeto(collarDivino)
-        rolando.irAlCastillo()
+        rolando.irAMorada()
         assert.equals(#{espadaDelDestino, libroDeHechizos, collarDivino}, castilloDePiedra.objetos())
     }
 
     test "Caso de prueba: Parte 1.3"{
         rolando.recogerObjeto(espadaDelDestino)
         rolando.recogerObjeto(collarDivino)
-        rolando.irAlCastillo()
+        rolando.irAMorada()
         rolando.recogerObjeto(armaduraValkyria)
         assert.that(rolando.tieneArtefacto(espadaDelDestino))
         assert.that(rolando.tieneArtefacto(collarDivino))
@@ -37,7 +37,7 @@ describe "Capos: Parte 1"{
         rolando.recogerObjeto(espadaDelDestino)
         rolando.recogerObjeto(libroDeHechizos)
         rolando.recogerObjeto(collarDivino)
-        rolando.irAlCastillo()
+        rolando.irAMorada()
         rolando.recogerObjeto(armaduraValkyria)
         rolando.recogerObjeto(collarDivino)
         assert.equals([espadaDelDestino, libroDeHechizos, collarDivino, armaduraValkyria, collarDivino], rolando.objetosVistos())
@@ -67,7 +67,7 @@ describe "Capos: Parte 2"{
 
     test "Caso de prueba: Parte 2.2"{
         libroDeHechizos.hechizos([bendicion,invisibilidad,invocacion])
-        rolando.irAlCastillo()
+        rolando.irAMorada()
         rolando.recogerObjeto(libroDeHechizos)
         assert.equals(4,libroDeHechizos.poderAportado(rolando))
         rolando.luchar()
@@ -84,5 +84,17 @@ describe "Capos: Parte 2"{
         assert.equals([palacioDeMarmol, torreDeMarfil], rolando.moradasConquistables(erethia))    
     }
 
+    test "Caso de prueba: Parte 2.4"{
+        erethia.enemigos([archibaldo, astra, caterina])
+        assert.notThat(rolando.esPoderosoEn(erethia))
+        rolando.poderBase(10)
+        assert.that(rolando.esPoderosoEn(erethia))
+    }
 
+    test "Caso de prueba: Parte 2.5"{
+        rolando.poderBase(15)
+        assert.that(rolando.poseeArtefactoFatal(astra))
+        rolando.luchar()
+        assert.notThat(rolando.poseeArtefactoFatal(caterina))
+    }
 }
