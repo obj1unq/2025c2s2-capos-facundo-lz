@@ -77,4 +77,12 @@ describe "Capos: Parte 2"{
         rolando.luchar()
         assert.equals(0,libroDeHechizos.poderAportado(rolando))
     }
+    
+    test "Caso de prueba: Parte 2.3"{
+        erethia.enemigos([archibaldo, astra, caterina])
+        assert.equals([archibaldo, astra], rolando.enemigosALosQueLesGana(erethia))
+        assert.equals([palacioDeMarmol, torreDeMarfil], rolando.moradasConquistables(erethia))    
+    }
+
+
 }
