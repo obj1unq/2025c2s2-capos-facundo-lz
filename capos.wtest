@@ -1,0 +1,100 @@
+import capos.*
+
+describe "Capos: Parte 1"{
+    method initialize(){
+        rolando.capacidad(2)
+    }
+
+    test "Caso de prueba: Parte 1.1"{
+        rolando.recogerObjeto(espadaDelDestino)
+        rolando.recogerObjeto(libroDeHechizos)
+        rolando.recogerObjeto(collarDivino)
+        rolando.recogerObjeto(armaduraValkyria)
+        assert.equals(#{espadaDelDestino, libroDeHechizos}, rolando.objetos())
+    }
+
+    test "Caso de prueba: Parte 1.2"{
+        rolando.recogerObjeto(espadaDelDestino)
+        rolando.recogerObjeto(libroDeHechizos)
+        rolando.irAMorada()
+        assert.equals(#{espadaDelDestino, libroDeHechizos}, castilloDePiedra.objetos())
+        rolando.recogerObjeto(collarDivino)
+        rolando.irAMorada()
+        assert.equals(#{espadaDelDestino, libroDeHechizos, collarDivino}, castilloDePiedra.objetos())
+    }
+
+    test "Caso de prueba: Parte 1.3"{
+        rolando.recogerObjeto(espadaDelDestino)
+        rolando.recogerObjeto(collarDivino)
+        rolando.irAMorada()
+        rolando.recogerObjeto(armaduraValkyria)
+        assert.that(rolando.tieneArtefacto(espadaDelDestino))
+        assert.that(rolando.tieneArtefacto(collarDivino))
+        assert.that(rolando.tieneArtefacto(armaduraValkyria))   
+    }
+
+    test "Caso de prueba: Parte 1.4" {
+        rolando.recogerObjeto(espadaDelDestino)
+        rolando.recogerObjeto(libroDeHechizos)
+        rolando.recogerObjeto(collarDivino)
+        rolando.irAMorada()
+        rolando.recogerObjeto(armaduraValkyria)
+        rolando.recogerObjeto(collarDivino)
+        assert.equals([espadaDelDestino, libroDeHechizos, collarDivino, armaduraValkyria, collarDivino], rolando.objetosVistos())
+    } 
+}
+
+describe "Capos: Parte 2"{
+    method initialize(){
+        rolando.capacidad(3)
+        rolando.poderBase(5)
+        rolando.recogerObjeto(espadaDelDestino)
+        rolando.recogerObjeto(collarDivino)
+        rolando.recogerObjeto(armaduraValkyria)
+    }
+
+    test "Caso de prueba: Parte 2.1"{
+        rolando.luchar()
+        assert.equals(6,rolando.poderBase())
+        assert.equals(18, rolando.poderDePelea())
+        rolando.luchar()
+        assert.equals(7,rolando.poderBase())
+        assert.equals(21.5, rolando.poderDePelea())
+        rolando.luchar()
+        assert.equals(8,rolando.poderBase())
+        assert.equals(24, rolando.poderDePelea())
+    }
+
+    test "Caso de prueba: Parte 2.2"{
+        libroDeHechizos.hechizos([bendicion,invisibilidad,invocacion])
+        rolando.irAMorada()
+        rolando.recogerObjeto(libroDeHechizos)
+        assert.equals(4,libroDeHechizos.poderAportado(rolando))
+        rolando.luchar()
+        assert.equals(6,libroDeHechizos.poderAportado(rolando))
+        rolando.luchar()
+        assert.equals(7,libroDeHechizos.poderAportado(rolando))
+        rolando.luchar()
+        assert.equals(0,libroDeHechizos.poderAportado(rolando))
+    }
+    
+    test "Caso de prueba: Parte 2.3"{
+        erethia.enemigos([archibaldo, astra, caterina])
+        assert.equals([archibaldo, astra], rolando.enemigosALosQueLesGana(erethia))
+        assert.equals([palacioDeMarmol, torreDeMarfil], rolando.moradasConquistables(erethia))    
+    }
+
+    test "Caso de prueba: Parte 2.4"{
+        erethia.enemigos([archibaldo, astra, caterina])
+        assert.notThat(rolando.esPoderosoEn(erethia))
+        rolando.poderBase(10)
+        assert.that(rolando.esPoderosoEn(erethia))
+    }
+
+    test "Caso de prueba: Parte 2.5"{
+        rolando.poderBase(15)
+        assert.that(rolando.poseeArtefactoFatal(astra))
+        rolando.luchar()
+        assert.notThat(rolando.poseeArtefactoFatal(caterina))
+    }
+}
