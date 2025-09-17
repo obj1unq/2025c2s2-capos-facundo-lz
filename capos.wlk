@@ -1,12 +1,12 @@
-object rolando {
+object rolando{
     var capacidad = 2
     const objetos = #{}
     const objetosVistos = []
-    var hogar = castilloDePiedra
+    var morada = castilloDePiedra
     var property poderBase = 5
 
-    method hogar(_hogar){
-        hogar = _hogar
+    method morada(_morada){
+        morada = _morada
     }
 
     method recogerObjeto (objeto){
@@ -24,8 +24,8 @@ object rolando {
         return objetos
     }
 
-    method irAlCastillo(){
-        hogar.guardarObjetos(objetos)
+    method irAMorada(){
+        morada.guardarObjetos(objetos)
         objetos.clear()
     }
 
@@ -38,7 +38,7 @@ object rolando {
     }
 
     method objetosAlmacenados (){
-        return hogar.objetos()
+        return morada.objetos()
     }
 
     method objetosVistos (){
@@ -59,7 +59,7 @@ object rolando {
     }
 
     method moradasConquistables (tierra){
-        return self.enemigosALosQueLesGana(tierra).forEach({enemigo => enemigo.hogar()})
+        return self.enemigosALosQueLesGana(tierra).map({enemigo => enemigo.morada()})
     }
 
     method enemigosALosQueLesGana (tierra){
@@ -68,6 +68,18 @@ object rolando {
 
     method leGanaAEnemigo (enemigo){
         return self.poderDePelea() > enemigo.poderDePelea()
+    }
+
+    method poseeArtefactoFatal (enemigo){
+        return !objetos.isEmpty() and self.objetoMasPoderoso().poderAportado(self) + poderBase > enemigo.poderDePelea()
+    }
+
+    method objetoMasPoderoso(){
+        return objetos.max({objeto => objeto.poderAportado(self)})
+    }
+
+    method objetoMasPoderosoAlmacenado(){
+        return self.objetosAlmacenados().max({objeto => objeto.poderAportado(self)})
     }
 }
 
@@ -165,7 +177,11 @@ object invisibilidad{
 
 object invocacion{
     method poderAportado(personaje){
-        return personaje.objetosAlmacenados().max({objeto => objeto.poderAportado(personaje)}).poderAportado(personaje)
+        if (personaje.objetosAlmacenados().isEmpty()){
+            return 0
+        } else {
+            return personaje.objetoMasPoderosoAlmacenado().poderAportado(personaje)
+        }
     }
 }
 
@@ -174,38 +190,38 @@ object erethia{
 }
 
 object caterina{
-    const hogar = fortalezaDeAcero
+    const morada = fortalezaDeAcero
 
     method poderDePelea(){
         return 28
     }
 
-    method hogar(){
-        return hogar
+    method morada(){
+        return morada
     }
 }
 
 object archibaldo{
-    const hogar = palacioDeMarmol
+    const morada = palacioDeMarmol
 
     method poderDePelea(){
         return 16
     }
 
-    method hogar(){
-        return hogar
+    method morada(){
+        return morada
     }
 }
 
 object astra{
-    const hogar = torreDeMarfil
+    const morada = torreDeMarfil
 
     method poderDePelea(){
         return 16
     }
 
-    method hogar(){
-        return hogar
+    method morada(){
+        return morada
     }
 }
 
