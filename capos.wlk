@@ -34,7 +34,11 @@ object rolando {
     }
 
     method objetosEnPosesion(){
-        return objetos + hogar.objetos()
+        return objetos + self.objetosAlmacenados()
+    }
+
+    method objetosAlmacenados (){
+        return hogar.objetos()
     }
 
     method objetosVistos (){
@@ -47,9 +51,23 @@ object rolando {
     }
 
     method poderDePelea (){
-        var poderAportadoHastaAhora = 0
-        objetos.forEach({objeto => poderAportadoHastaAhora += objeto.poderAportado(self)})
-        return poderBase + poderAportadoHastaAhora
+        return poderBase + objetos.sum({objeto => objeto.poderAportado(self)})
+    }
+
+    method esPoderosoEn (tierra){
+        return tierra.enemigos().all({enemigo => self.leGanaAEnemigo(enemigo)})
+    }
+
+    method moradasConquistables (tierra){
+        return self.enemigosALosQueLesGana(tierra).forEach({enemigo => enemigo.hogar()})
+    }
+
+    method enemigosALosQueLesGana (tierra){
+        return tierra.enemigos().filter({enemigo => self.leGanaAEnemigo(enemigo)})
+    }
+
+    method leGanaAEnemigo (enemigo){
+        return self.poderDePelea() > enemigo.poderDePelea()
     }
 }
 
@@ -112,7 +130,7 @@ object armaduraValkyria{
 }
 
 object libroDeHechizos{
-    var hechizos = [bendicion,invisibilidad,invocacion]
+    var hechizos = [invocacion]
 
     method poderAportado(personaje){
         if (hechizos.isEmpty()){
@@ -123,7 +141,7 @@ object libroDeHechizos{
     }
 
     method sumarBatalla(){
-        if (not hechizos.isEmpty()){
+        if (!hechizos.isEmpty()){
             hechizos = hechizos.drop(1)
         }
     }
@@ -141,12 +159,61 @@ object bendicion{
 
 object invisibilidad{
     method poderAportado(personaje){
-        return personaje.poderDePelea()
+        return personaje.poderBase()
     }
 }
 
 object invocacion{
     method poderAportado(personaje){
-        return personaje.objetos().max({objeto => objeto.poderAportado(personaje)})
+        return personaje.objetosAlmacenados().max({objeto => objeto.poderAportado(personaje)}).poderAportado(personaje)
     }
+}
+
+object erethia{
+    var property enemigos = [caterina, archibaldo, astra]
+}
+
+object caterina{
+    const hogar = fortalezaDeAcero
+
+    method poderDePelea(){
+        return 28
+    }
+
+    method hogar(){
+        return hogar
+    }
+}
+
+object archibaldo{
+    const hogar = palacioDeMarmol
+
+    method poderDePelea(){
+        return 16
+    }
+
+    method hogar(){
+        return hogar
+    }
+}
+
+object astra{
+    const hogar = torreDeMarfil
+
+    method poderDePelea(){
+        return 16
+    }
+
+    method hogar(){
+        return hogar
+    }
+}
+
+object fortalezaDeAcero{
+}
+
+object palacioDeMarmol{
+}
+
+object torreDeMarfil{
 }
